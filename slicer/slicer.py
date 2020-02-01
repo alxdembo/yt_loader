@@ -25,7 +25,7 @@ class Slicer:
             return download_ooyala(self.video_id, file_name)
 
     def get_url(self):
-        file_name = self.source + "_" + self.video_id + "%08x" % random.getrandbits(32)
+        file_name = self.source + "_" + self.video_id + "%08x" % random.getrandbits(32) + ".mp4"
         destination = f"{current_app.config['TMP_FOLDER']}/{file_name}"
         slice_destination = f"{current_app.config['TMP_FOLDER']}/sliced_{file_name}"
 
