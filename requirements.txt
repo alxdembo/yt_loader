@@ -1,0 +1,5 @@
+flask
+requests
+boto3
+moviepy
+git+https://github.com/giacaglia/pytube.git
