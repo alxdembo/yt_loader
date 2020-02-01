@@ -1,18 +1,17 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+
+from slicer.slicer import Slicer
 
 app = Flask(__name__)
+app.config.from_pyfile('settings.py')
 
 
-@app.route('/slicer/api/v1.0/slice/<str:source>', methods=['GET'])
-def get_slice(source):
+@app.route('/slicer/api/v1.0/slice/<string:source>/<string:video_id>/<int:start>/<int:end>', methods=['GET'])
+def get_slice(source, video_id, start, end):
+    slicer = Slicer(source, video_id, start, end)
 
-    slice_start = request.args.get('video_id')
-    slice_start = request.args.get('start')
-    slice_start = request.args.get('end')
-
-    return
+    return jsonify({'url': slicer.get_url()})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    app.config.from_pyfile('settings.py')
+    app.run()

@@ -1,19 +1,19 @@
 import requests
 from flask import current_app
+from pytube import YouTube
 
 
-class DownloadHelpers:
-    @staticmethod
-    def download_youtube(video_id):
-        from pytube import YouTube
-        video = YouTube(current_app.config['STREAM_HOST_URIS']['youtube'] + video_id, defer_prefetch_init=False)
-        video.streams.first().download()
+def download_youtube(video_id, file_name):
+    video = YouTube(current_app.config['STREAM_HOST_YOUTUBE'] + video_id)
+    video.streams.first().download(output_path=current_app.config['TMP_FOLDER'], filename=file_name)
 
-    @staticmethod
-    def download_ooyala(video_id):
-        r = requests.get(
-            f"{current_app.config['STREAM_HOST_URIS']['ooyala'] + video_id}/{current_app.config['OOYALA_TOKEN']}",
-            stream=True)
-        with open('file.mp4', 'wb') as f:
-            for chunk in r.iter_content(256):
-                f.write(chunk)
+
+def download_ooyala(video_id, file_name):
+    r = requests.get(
+        f"{current_app.config['STREAM_HOST_OOYALA'] + video_id}/{current_app.config['OOYALA_TOKEN']}",
+        stream=True)
+
+    # todo stop downloading after reaching end
+    with open(f"{current_app.config['TMP_FOLDER']}/{file_name}.mp4", 'wb') as f:
+        for chunk in r.iter_content(256):
+            f.write(chunk)
