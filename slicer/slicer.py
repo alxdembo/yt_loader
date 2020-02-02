@@ -1,6 +1,5 @@
-import os
 import random
-
+from moviepy.editor import *
 from flask import current_app
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
@@ -11,11 +10,12 @@ from slicer.storage_backends import get_s3_upload_url
 
 class Slicer:
 
-    def __init__(self, source, video_id, start, end):
+    def __init__(self, source, video_id, start, end, rerender=True):
         self.video_id = video_id
         self.start = start
         self.end = end
         self.source = source
+        self.rerender = rerender
 
     def __get_clip(self, file_name):
 
@@ -24,6 +24,14 @@ class Slicer:
 
         if self.source == 'ooyala':
             return download_ooyala(self.video_id, file_name)
+
+    def __slice_clip(self, original_clip_path, sliced_clip_path):
+        if self.rerender:
+            video = VideoFileClip(original_clip_path).subclip(self.start, self.end)
+            video.write_videofile(sliced_clip_path)
+        else:
+            # executes faster, but not always works properly
+            ffmpeg_extract_subclip(original_clip_path, self.start, self.end, targetname=sliced_clip_path)
 
     def get_url(self):
         self.__validate_timestamps()
@@ -34,7 +42,9 @@ class Slicer:
         self.__get_clip(file_name)
         self.__validate_timestamp_extents(original_clip_path)
 
-        ffmpeg_extract_subclip(original_clip_path, self.start, self.end, targetname=sliced_clip_path)
+        video = VideoFileClip(original_clip_path).subclip(self.start, self.end)
+        video.write_videofile(sliced_clip_path)
+
         os.remove(original_clip_path)
 
         url = get_s3_upload_url(file_name)

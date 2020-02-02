@@ -16,6 +16,6 @@ def download_ooyala(video_id, file_name):
         stream=True)
 
     # todo stop downloading after reaching end
-    with open(f"{current_app.config['TMP_FOLDER']}/{file_name}.mp4", 'wb') as f:
+    with open(f"{current_app.config['TMP_FOLDER']}/{file_name}", 'wb') as f:
         for chunk in r.iter_content(256):
             f.write(chunk)
