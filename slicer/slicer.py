@@ -27,15 +27,17 @@ class Slicer:
 
     def get_url(self):
         self.__validate_timestamps()
-        file_name = self.source + "_" + self.video_id + "%08x" % random.getrandbits(32) + ".mp4"
+        file_name = self.source + "_" + self.video_id + "_%08x" % random.getrandbits(32) + ".mp4"
         original_clip_path = f"{current_app.config['TMP_FOLDER']}/{file_name}"
         sliced_clip_path = f"{current_app.config['TMP_FOLDER']}/sliced_{file_name}"
 
         self.__get_clip(file_name)
         self.__validate_timestamp_extents(original_clip_path)
+
         ffmpeg_extract_subclip(original_clip_path, self.start, self.end, targetname=sliced_clip_path)
-        url = get_s3_upload_url(file_name)
         os.remove(original_clip_path)
+
+        url = get_s3_upload_url(file_name)
         os.remove(sliced_clip_path)
 
         return url
@@ -54,4 +56,3 @@ class Slicer:
 
         if self.start >= self.end:
             raise ValueError(f'Start timestamp {self.start} is greater or equals end timestamp {self.end}')
-
