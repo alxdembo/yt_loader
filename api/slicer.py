@@ -65,4 +65,4 @@ class Slicer:
             raise ValueError(f'Invalid end timestamp.')
 
         if self.start >= self.end:
-            raise ValueError(f'Start timestamp {self.start} is greater or equals end timestamp {self.end}')
+            raise ValueError(f'Start timestamp {self.start}s is greater or equals end timestamp {self.end}s')

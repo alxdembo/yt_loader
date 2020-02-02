@@ -17,9 +17,9 @@ def get_slice(source):
         url = slicer.get_url()
 
     except ValueError as e:
-        return jsonify({'error': str(e)}), 422
+        return jsonify({'error_message': str(e)}), 422
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error_message': str(e)}), 500
 
     return jsonify({'url': url})

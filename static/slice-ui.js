@@ -10,7 +10,7 @@ $(document).ready(function () {
             error: function (e) {
                 $(".lds-dual-ring").addClass('hidden');
                 $("#result").removeClass('hidden');
-                $('#result').val('Error, please try again. ' + e.error)
+                $('#result').val('Error, please try again. ' + JSON.parse(e.responseText).error_message)
             },
             success: function (e) {
                 $(".lds-dual-ring").css("display", "none");

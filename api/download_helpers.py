@@ -15,7 +15,7 @@ def download_ooyala(video_id, file_name):
         f"{current_app.config['STREAM_HOST_OOYALA'] + video_id}/{current_app.config['OOYALA_TOKEN']}",
         stream=True)
 
-    # todo stop downloading after reaching end
+    # todo stop downloading after reaching end timestamp
     with open(f"{current_app.config['TMP_FOLDER']}/{file_name}", 'wb') as f:
         for chunk in r.iter_content(256):
             f.write(chunk)
