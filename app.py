@@ -1,6 +1,8 @@
 from pytimeparse.timeparse import timeparse
 from flask import Flask, jsonify, request, render_template
 from flask_bootstrap import Bootstrap
+
+from forms import SlicerForm
 from slicer.slicer import Slicer
 
 app = Flask(__name__)
@@ -9,9 +11,11 @@ app.config.from_pyfile('settings_local.py')
 Bootstrap(app)
 
 
+# no csrf token needed as the service is stateless
 @app.route('/', methods=['GET', 'POST'])
 def web_ui():
-    return render_template('slicer-ui.html')
+    form = SlicerForm()
+    return render_template('slicer-ui.html', form=form)
 
 
 @app.route('/slicer/api/v1.0/slice/<string:source>/<string:video_id>', methods=['GET'])

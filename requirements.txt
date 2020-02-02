@@ -5,3 +5,5 @@ moviepy
 git+https://github.com/giacaglia/pytube.git
 pytimeparse
 flask-bootstrap
+wtforms
+flask_wtf
