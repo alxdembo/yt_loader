@@ -19,4 +19,7 @@ def get_slice(source):
     except ValueError as e:
         return jsonify({'error': str(e)}), 422
 
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
     return jsonify({'url': url})

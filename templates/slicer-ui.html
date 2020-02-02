@@ -3,27 +3,30 @@
 {% block title %}Slicer{% endblock %}
 {% block styles %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('.static', filename='slice-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='slice-ui.css') }}">
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
     {{ JSGlue.include() }}
-    <script src="{{ url_for('.static', filename='slice-ui.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='jquery.form.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='slice-ui.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <form method="post" class="form-slice " action="#">
+        <form id="slice-form" class="form-slice " action="#">
             <dl>
                 {{ wtf.quick_form(form) }}
             </dl>
             <button class="form-slice btn btn-lg btn-primary btn-block">Slice the video</button>
             <br>
-            <div class="form-slice hidden">
-                <textarea class="form-control" rows="5" id="comment"></textarea>
+            <div class="form-slice">
+                <textarea class="form-control hidden" rows="5" id="result"></textarea>
             </div>
         </form>
-
     </div>
+
+    <div class="lds-dual-ring hidden"></div>
 {% endblock %}
