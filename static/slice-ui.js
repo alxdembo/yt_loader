@@ -7,3 +7,4 @@ $(document).ready(function () {
         });
     });
 });
+console.log(Flask.url_for("api_v1_slicer"));

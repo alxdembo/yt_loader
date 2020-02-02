@@ -14,13 +14,13 @@ jsglue = JSGlue(app)
 
 
 # no csrf token needed as the service is stateless
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'], endpoint='home')
 def web_ui():
     form = SlicerForm()
     return render_template('slicer-ui.html', form=form)
 
 
-@app.route('/slicer/api/v1.0/slice/<string:source>/<string:video_id>', methods=['GET'])
+@app.route('/slicer/api/v1.0/slice/<string:source>/<string:video_id>', methods=['GET'], endpoint='api_v1_slicer')
 def get_slice(source, video_id):
     start = request.args.get("start")
     end = request.args.get("end")
