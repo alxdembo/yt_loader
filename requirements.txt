@@ -7,3 +7,4 @@ pytimeparse
 flask-bootstrap
 wtforms
 flask_wtf
+Flask-JSGlue

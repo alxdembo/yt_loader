@@ -4,11 +4,13 @@ from flask_bootstrap import Bootstrap
 
 from forms import SlicerForm
 from slicer.slicer import Slicer
+from flask_jsglue import JSGlue
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
 app.config.from_pyfile('settings_local.py')
 Bootstrap(app)
+jsglue = JSGlue(app)
 
 
 # no csrf token needed as the service is stateless
