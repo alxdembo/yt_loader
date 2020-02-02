@@ -4,7 +4,7 @@ $(document).ready(function () {
             beforeSubmit: function () {
                 $(".lds-dual-ring").removeClass('hidden');
             },
-            url: Flask.url_for('api.api_v1_slicer', {'source': 'youtube'}),
+            url: Flask.url_for('api.api_v1_slicer', {'source': $("#source option:selected").val()}),
             type: 'get',
 
             error: function (e) {
