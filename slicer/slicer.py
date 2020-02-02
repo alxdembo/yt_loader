@@ -31,7 +31,8 @@ class Slicer:
 
         self.get_clip(file_name)
         ffmpeg_extract_subclip(destination, self.start, self.end, targetname=slice_destination)
+        url = get_s3_upload_url(file_name)
         os.remove(destination)
         os.remove(slice_destination)
 
-        return get_s3_upload_url(file_name)
+        return url
