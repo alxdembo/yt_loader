@@ -4,8 +4,8 @@ from flask import current_app
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 
-from slicer.download_helpers import download_youtube, download_ooyala
-from slicer.storage_backends import get_s3_upload_url
+from api.download_helpers import download_youtube, download_ooyala
+from api.storage_backends import get_s3_upload_url
 
 
 class Slicer:
