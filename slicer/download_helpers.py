@@ -1,3 +1,4 @@
+import os
 import requests
 from flask import current_app
 from pytube import YouTube
@@ -5,7 +6,8 @@ from pytube import YouTube
 
 def download_youtube(video_id, file_name):
     video = YouTube(current_app.config['STREAM_HOST_YOUTUBE'] + video_id)
-    video.streams.first().download(output_path=current_app.config['TMP_FOLDER'], filename=file_name)
+    file_name_without_ext = os.path.splitext(file_name)[0]
+    video.streams.first().download(output_path=current_app.config['TMP_FOLDER'], filename=file_name_without_ext)
 
 
 def download_ooyala(video_id, file_name):
