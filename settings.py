@@ -9,8 +9,3 @@ STREAM_HOST_OOYALA = 'http://85072-c.ooyala.com/'
 
 YOUTUBE_URI = 'https://www.youtube.com/watch?v='
 OOYALA_URI = 'http://85072-c.ooyala.com/'
-
-try:
-    from .settings_local import *
-except ImportError:
-    pass
