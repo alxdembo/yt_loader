@@ -2,6 +2,7 @@ import os
 import random
 
 from flask import current_app
+from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 
 from slicer.download_helpers import download_youtube, download_ooyala
@@ -16,7 +17,7 @@ class Slicer:
         self.end = end
         self.source = source
 
-    def get_clip(self, file_name):
+    def __get_clip(self, file_name):
 
         if self.source == 'youtube':
             return download_youtube(self.video_id, file_name)
@@ -25,14 +26,32 @@ class Slicer:
             return download_ooyala(self.video_id, file_name)
 
     def get_url(self):
+        self.__validate_timestamps()
         file_name = self.source + "_" + self.video_id + "%08x" % random.getrandbits(32) + ".mp4"
-        destination = f"{current_app.config['TMP_FOLDER']}/{file_name}"
-        slice_destination = f"{current_app.config['TMP_FOLDER']}/sliced_{file_name}"
+        original_clip_path = f"{current_app.config['TMP_FOLDER']}/{file_name}"
+        sliced_clip_path = f"{current_app.config['TMP_FOLDER']}/sliced_{file_name}"
 
-        self.get_clip(file_name)
-        ffmpeg_extract_subclip(destination, self.start, self.end, targetname=slice_destination)
+        self.__get_clip(file_name)
+        self.__validate_timestamp_extents(original_clip_path)
+        ffmpeg_extract_subclip(original_clip_path, self.start, self.end, targetname=sliced_clip_path)
         url = get_s3_upload_url(file_name)
-        os.remove(destination)
-        os.remove(slice_destination)
+        os.remove(original_clip_path)
+        os.remove(sliced_clip_path)
 
         return url
+
+    def __validate_timestamp_extents(self, destination):
+        clip = VideoFileClip(destination)
+        if clip.duration < self.end:
+            raise ValueError(f'End timestamp {self.end} is out of clip bounds: {clip.duration}')
+
+    def __validate_timestamps(self):
+        if self.start is None:
+            raise ValueError(f'Invalid start timestamp.')
+
+        if self.end is None:
+            raise ValueError(f'Invalid end timestamp.')
+
+        if self.start >= self.end:
+            raise ValueError(f'Start timestamp {self.start} is greater or equals end timestamp {self.end}')
+
