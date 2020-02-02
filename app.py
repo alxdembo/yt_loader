@@ -1,11 +1,17 @@
 from pytimeparse.timeparse import timeparse
-from flask import Flask, jsonify, request
-
+from flask import Flask, jsonify, request, render_template
+from flask_bootstrap import Bootstrap
 from slicer.slicer import Slicer
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
 app.config.from_pyfile('settings_local.py')
+Bootstrap(app)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def web_ui():
+    return render_template('slicer-ui.html')
 
 
 @app.route('/slicer/api/v1.0/slice/<string:source>/<string:video_id>', methods=['GET'])
