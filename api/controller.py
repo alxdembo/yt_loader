@@ -5,8 +5,9 @@ from api.slicer import Slicer
 api_module = Blueprint('api', __name__)
 
 
-@api_module.route('/v1.0/slice/<string:source>/<string:video_id>', methods=['GET'], endpoint='api_v1_slicer')
-def get_slice(source, video_id):
+@api_module.route('/v1.0/slice/<string:source>', methods=['GET'], endpoint='api_v1_slicer')
+def get_slice(source):
+    video_id = request.args.get("video_id")
     start = request.args.get("start")
     end = request.args.get("end")
     rerender = "true" == request.args.get("rerender", "true")
